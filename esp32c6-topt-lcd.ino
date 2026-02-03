@@ -7,6 +7,7 @@
 #include <time.h>
 #include <RTClib.h>
 #include "mbedtls/md.h"
+#include "config.h"
 #include <Adafruit_NeoPixel.h>
 
 #define BOOT_KEY_PIN     9
@@ -28,7 +29,7 @@
 
 static const char *WIFI_SSID = WIFI_SSID_VALUE;
 static const char *WIFI_PASS = WIFI_PASS_VALUE;
-static const char *TOTP_SECRET_BASE32 = TOTP_SECRET_BASE32_VALUE; // TODO: replace with your secret
+static const char *TOTP_SECRET_BASE32 = TOTP_SECRET_BASE32_VALUE;
 static const uint32_t TOTP_INTERVAL = 30; // seconds
 
 // I2C pins for DS3231 on ESP32-C6
