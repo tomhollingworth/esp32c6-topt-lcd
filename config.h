@@ -3,4 +3,4 @@
 // WiFi password
 #define WIFI_PASS_VALUE ""
 // Base32 encoded secret for TOTP generation
-#define TOTP_SECRET_BASE32_VALUE ""
+#define TOTP_SECRET_BASE32_VALUE "9999999999999999999999"
