@@ -44,10 +44,20 @@ Connect the DS3231 to the ESP32‑C6 module using I2C:
 Edit the user config section in [waveshare-otp-display.ino](waveshare-otp-display.ino):
 
 ```cpp
-static const char *WIFI_SSID = "Wifi-SSID";
-static const char *WIFI_PASS = "<Password>";
-static const char *TOTP_SECRET_BASE32 = "9999999999999999999999"; // TODO: replace with your secret
-static const uint32_t TOTP_INTERVAL = 30; // seconds
+// ====== User Config ======
+#ifndef WIFI_SSID_VALUE
+#define WIFI_SSID_VALUE ""
+#warning "WIFI_SSID_VALUE not defined. Define it via build flags or an untracked header to set the Wi-Fi SSID securely."
+#endif
+#ifndef WIFI_PASS_VALUE
+#define WIFI_PASS_VALUE ""
+#warning "WIFI_PASS_VALUE not defined. Define it via build flags or an untracked header to set the Wi-Fi password securely."
+#endif
+#ifndef TOTP_SECRET_BASE32_VALUE
+#define TOTP_SECRET_BASE32_VALUE "9999999999999999999999"
+#warning "TOTP_SECRET_BASE32_VALUE not defined. Define it via build flags or an untracked header to set the TOTP secret securely."
+#endif
+// ==== End user Config ====
 ```
 
 ![user configuration section in arduino studio](./docs/user-config.png)
