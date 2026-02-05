@@ -49,6 +49,9 @@ String lastTotp = "";
 float lastTempC = NAN;
 unsigned long lastLedMs = 0;
 uint16_t ledHue = 0;
+unsigned long lastUnixTime = 0;
+unsigned long lastUnixTickMs = 0;
+char logoLabelText[64] = {0};
 
 Adafruit_NeoPixel ws2812b(WS2812B_LED_COUNT, WS2812B_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -150,6 +153,27 @@ String generateTotp(const char* base32Secret, unsigned long timestamp) {
   return String(result);
 }
 
+void updateCountdown(long milli) {
+  uint32_t nowMs = millis();
+
+  if (lastUnixTickMs == 0) {
+    DateTime now = rtc.now();
+    lastUnixTime = now.unixtime();
+    lastUnixTickMs = nowMs;
+  }
+
+  uint32_t elapsedMs = nowMs - lastUnixTickMs;
+  uint64_t intervalMs = (uint64_t)TOTP_INTERVAL * 1000ULL;
+  uint64_t msIntoInterval = ((uint64_t)(lastUnixTime % TOTP_INTERVAL) * 1000ULL) + elapsedMs;
+
+  if (msIntoInterval >= intervalMs) {
+    msIntoInterval %= intervalMs;
+  }
+
+  uint32_t arcValue = (uint32_t)((msIntoInterval * 100ULL) / intervalMs);
+  lv_arc_set_value(ui_CountDown, arcValue);
+}
+
 // ====== Helpers ======
 bool syncTimeWithNtp() {
   WiFi.mode(WIFI_STA);
@@ -200,7 +224,12 @@ void setup() {
   Lvgl_Init();
   ui_init();
   updateWifiIcons(false);
-    
+
+  // Store the original label text
+  const char *label = lv_label_get_text(ui_Logo_Label);
+  if (label != nullptr) {
+    strncpy(logoLabelText, label, sizeof(logoLabelText) - 1);
+  }
     
   if (!rtc.begin()) {
     
@@ -218,6 +247,9 @@ void setup() {
     delay(1000);
   }
 
+  // Reset the label text back to original
+  lv_label_set_text(ui_Logo_Label, logoLabelText);
+
   lastTickMs = millis();
 }
 
@@ -228,6 +260,8 @@ void loop() {
 
     DateTime now = rtc.now();
     unsigned long unixTime = now.unixtime();
+    lastUnixTime = unixTime;
+    lastUnixTickMs = nowMs;
     String totp = generateTotp(TOTP_SECRET_BASE32, unixTime);
     float tempC = rtc.getTemperature();
 
@@ -239,6 +273,7 @@ void loop() {
       lastTempC = tempC;
     }
   }
+  updateCountdown(nowMs - lastTickMs);
   updateWs2812b();
   Timer_Loop();
   delay(1);

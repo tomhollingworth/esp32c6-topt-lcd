@@ -23,6 +23,7 @@ extern lv_obj_t * ui_Temperature;
 extern lv_obj_t * ui_Battery_Label;
 extern lv_obj_t * ui_WifiOn;
 extern lv_obj_t * ui_WifiOff;
+extern lv_obj_t * ui_CountDown;
 // CUSTOM VARIABLES
 extern lv_obj_t * uic_Battery_Voltage;
 extern lv_obj_t * uic_WifiOn;

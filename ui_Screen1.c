@@ -18,6 +18,7 @@ lv_obj_t * ui_Temperature = NULL;
 lv_obj_t * ui_Battery_Label = NULL;
 lv_obj_t * ui_WifiOn = NULL;
 lv_obj_t * ui_WifiOff = NULL;
+lv_obj_t * ui_CountDown = NULL;
 // event funtions
 
 // build funtions
@@ -122,6 +123,27 @@ void ui_Screen1_screen_init(void)
     lv_obj_remove_flag(ui_WifiOff, LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE | LV_OBJ_FLAG_GESTURE_BUBBLE |
                        LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE);     /// Flags
 
+    ui_CountDown = lv_arc_create(ui_Screen1);
+    lv_obj_set_width(ui_CountDown, 50);
+    lv_obj_set_height(ui_CountDown, 50);
+    lv_obj_set_x(ui_CountDown, 120);
+    lv_obj_set_y(ui_CountDown, -45);
+    lv_obj_set_align(ui_CountDown, LV_ALIGN_CENTER);
+    lv_obj_remove_flag(ui_CountDown, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_PRESS_LOCK | LV_OBJ_FLAG_CLICK_FOCUSABLE |
+                       LV_OBJ_FLAG_GESTURE_BUBBLE | LV_OBJ_FLAG_SNAPPABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_ELASTIC |
+                       LV_OBJ_FLAG_SCROLL_MOMENTUM | LV_OBJ_FLAG_SCROLL_CHAIN);     /// Flags
+    lv_obj_set_scrollbar_mode(ui_CountDown, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(ui_CountDown, LV_DIR_TOP);
+    lv_arc_set_value(ui_CountDown, 50);
+    lv_arc_set_bg_angles(ui_CountDown, 100, 99);
+
+    lv_obj_set_style_arc_color(ui_CountDown, lv_color_hex(0xFA9730), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_arc_opa(ui_CountDown, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_arc_width(ui_CountDown, 10, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_bg_color(ui_CountDown, lv_color_hex(0xFFFFFF), LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_CountDown, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
+
     uic_Battery_Voltage = ui_Battery_Voltage;
     uic_WifiOn = ui_WifiOn;
     uic_WifiOff = ui_WifiOff;
@@ -146,5 +168,6 @@ void ui_Screen1_screen_destroy(void)
     ui_WifiOn = NULL;
     uic_WifiOff = NULL;
     ui_WifiOff = NULL;
+    ui_CountDown = NULL;
 
 }
